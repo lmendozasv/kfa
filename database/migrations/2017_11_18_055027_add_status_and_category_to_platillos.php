@@ -14,10 +14,10 @@ class AddStatusAndCategoryToPlatillos extends Migration
     public function up()
     {
         //
-//         Schema::table('platillos', function($table) {
-//            $table->integer('status');
-//            $table->integer('category_id');
-//    });
+         Schema::table('platillos', function($table) {
+            $table->string('status');
+            $table->integer('category_id');
+    });
     }
 
     /**
@@ -29,9 +29,9 @@ class AddStatusAndCategoryToPlatillos extends Migration
     {
         //
           
-//         Schema::table('platillos', function($table) {
-//            $table->dropColumn('status');
-//            $table->dropColumn('category_id');
-//    });
+         Schema::table('platillos', function($table) {
+            $table->dropColumn('status');
+            $table->dropColumn('category_id');
+    });
     }
 }
