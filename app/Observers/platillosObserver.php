@@ -16,7 +16,20 @@ class platillosObserver
     public function creating(platillos $platillos)
     {
         
-                $woocommerce = new Client(
+          
+        
+        //code...
+    }
+
+     /**
+     * Listen to the platillos created event.
+     *
+     * @param  platillos  $platillos
+     * @return void
+     */
+    public function created(platillos $platillos)
+    {
+              $woocommerce = new Client(
     'http://koalafood.com', 
     'ck_9b67e449fa20b85a4de47c582748e7bb5fda0bcb', 
     'cs_48ab4d01b33895b5843b6bcd6abc8c3c7d9bd222',
@@ -35,12 +48,10 @@ class platillosObserver
             'manage_stock'=>'true',
             'stock_quantity'=> $platillos->qty_available,
             'in_stock'=>'true',
+            'sku'=>$platillos->id_creator."_".$platillos->id,            
     'categories' => [
         [
-            'id' => 9
-        ],
-        [
-            'id' => 14
+            'id' => $platillos->category_id
         ]
     ],
     'images' => [
@@ -56,19 +67,6 @@ class platillosObserver
 ];
         
        $woocommerce->post('products', $data);
-        
-        //code...
-    }
-
-     /**
-     * Listen to the platillos created event.
-     *
-     * @param  platillos  $platillos
-     * @return void
-     */
-    public function created(platillos $platillos)
-    {
-        //code...
     }
 
     /**

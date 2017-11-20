@@ -13,42 +13,87 @@ class ordenesController extends CrudController{
     public function all($entity){
         parent::all($entity); 
 
-        /** Simple code of  filter and grid part , List of all fields here : http://laravelpanel.com/docs/master/crud-fields
-
-
-			$this->filter = \DataFilter::source(new \App\Category);
-			$this->filter->add('name', 'Name', 'text');
+       
+         
+            
+            
+            $this->userd = \Auth::guard('panel')->user()->id;        
+            
+            $this->filter = \DataFilter::source(\App\ordenes::where('id_owner',$this->userd));
+        
+			$this->filter->add('title', 'Title', 'text');
 			$this->filter->submit('search');
 			$this->filter->reset('reset');
 			$this->filter->build();
-
 			$this->grid = \DataGrid::source($this->filter);
-			$this->grid->add('name', 'Name');
-			$this->grid->add('code', 'Code');
+        
+        
+			$this->grid->add('qty', 'Cantidad');
+			$this->grid->add('empresa', 'Empresa - Dirección');
+            $this->grid->add('contacto', 'contacto');
+            
+        
 			$this->addStylesToGrid();
-
-        */
+        
                  
         return $this->returnView();
     }
     
     public function  edit($entity){
         
-        parent::edit($entity);
+         $this->edit = \DataEdit::source(new \App\ordenes());
 
-        /* Simple code of  edit part , List of all fields here : http://laravelpanel.com/docs/master/crud-fields
-	
-			$this->edit = \DataEdit::source(new \App\Category());
+			$this->edit->label('Editar orden');
 
-			$this->edit->label('Edit Category');
-
-			$this->edit->add('name', 'Name', 'text');
-		
-			$this->edit->add('code', 'Code', 'text')->rule('required');
-
-
-        */
-       
+			$this->edit->add('qty', 'Cantidad', 'number');
+            $this->edit->add('id_platillo', 'Platillo', 'text');
+		    $this->edit->add('empresa', 'Empresa', 'text');
+			$this->edit->add('contacto', 'Contacto', 'text')->rule('required');
+            $user = \Auth::guard('panel')->user()->id;
+            $this->edit->add('id_owner','iduser','hidden')->insertValue($user); 
+            
+            $task = \App\platillos::find(1)->price;
+            //$task->price;
+            
+            $this->edit->add('total','total','hidden')->insertValue($task); 
+            
+            $this->edit->add('status_order', 'Estado de orden', 'radiogroup')->option('1', 'Creada')->option('2', 'En proceso')->option('3', 'Despachada')->option('4', 'Entregada');
+            //$this->edit->add('id_platillo','Platillo','select')->options(\App\platillos::pluck("title", "id")->all());
+            $this->edit->add('id_platillo','Platillo','select')->options(\App\platillos::where("id_creator",$user )->pluck('title','id'));
+            //$specialities = Speciality::where('role_id',$request->roleid)->pluck('name','id');
+        
         return $this->returnEditView();
-    }    
+    }  
+    
+    
+
+    
+    
+    
+    
+     public function store()
+    {
+        return Project::create(Input::all());
+    }
+
+
+    public function show($id)
+    {
+        return Project::findOrFail($id);
+    }
+
+
+    public function update($projectId)
+    {
+        Project::findOrFail($projectId)->update(Input::all());
+    }
+
+
+    public function destroy($id)
+    {
+        Project::findOrFail($id)->delete();
+    }
+    
+    
+    
 }

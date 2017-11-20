@@ -8,7 +8,7 @@ use \Serverfireteam\Panel\CrudController;
 use Illuminate\Http\Request;
 use App\Helpers\CrudControllerHelper;
 use Auth;
-use App\Helpers\AdminHelper;
+
 
 
 class platillosController extends CrudController{
@@ -36,7 +36,6 @@ class platillosController extends CrudController{
 			$this->grid = \DataGrid::source($this->filter);
 			$this->grid->add('title', 'Nombre');
 			$this->grid->add('status', 'Disponible');
-//            $this->grid->add('status', 'Estado', 'radiogroup')->option('1', 'Disponible')->option('0', 'No Disponible');
 			$this->addStylesToGrid();
 
         
@@ -68,6 +67,12 @@ class platillosController extends CrudController{
              $user = \Auth::guard('panel')->user()->id;
             $this->edit->add('id_creator','iduser','hidden')->insertValue($user); 
             $this->edit->add('status', 'Estado', 'radiogroup')->option('Si', 'Disponible')->option('No', 'No Disponible');
+            //$this->edit->add('categories.name', 'Tipo de comida', 'tags'); 
+            
+        $this->edit->add('category_id','Tipo de comida','select')->options(\App\categories::pluck("name", "wpcode")->all());
+        
+        
+            //$this->edit->add('categories.name', 'Categories', 'tags'); 
         //create product
         
             

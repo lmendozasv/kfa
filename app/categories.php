@@ -5,9 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Serverfireteam\Panel\ObservantTrait;
 
-class ordenes extends Model {
+class categories extends Model {
 	use ObservantTrait;
 	
-    protected $table = 'ordenes';
-    protected $primaryKey = 'id_orden';
+    protected $table = 'categories';
+
 }
