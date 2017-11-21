@@ -34,3 +34,6 @@ Route::get('/', function () {
 //    return array($id => $names[$id]);
 //});
 //
+
+Route::resource('ordenes', 'ordenesController',
+                ['only' => [ 'store', 'update', 'destroy', 'show']]);

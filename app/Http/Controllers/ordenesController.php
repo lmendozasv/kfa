@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use \Serverfireteam\Panel\CrudController;
-
+use Log;
 use Illuminate\Http\Request;
 
 class ordenesController extends CrudController{
@@ -71,10 +71,36 @@ class ordenesController extends CrudController{
     
     
     
-     public function store()
-    {
-        return Project::create(Input::all());
+     public function store(Request $request){
+    
+         
+         $bodyContent = $request->getContent();
+         
+         $location = json_decode($bodyContent);
+         $status = $location->status;
+         $items =  $location->line_items[0]->name;
+         $price =  $location->line_items[0]->price;
+         //sku - owner $location->status;
+         
+         $user = new \App\ordenes();
+         $user->qty = 1;
+         $user->id_platillo = 1;   
+         $user->empresa = 'Ela';
+         $user->contacto = 'Elaamn';
+         $user->total = $price;   
+         $user->status_order = 1;   
+         $user->id_owner = 1;   
+         $user->save();
+         
+         Log::error('Estado de orden: '.$items);
+         
+         return "ok";
     }
+    
+//    public function foo(Request $request){
+//    $bodyContent = $request->getContent();
+//}
+    
 
 
     public function show($id)
